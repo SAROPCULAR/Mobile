@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+
 
 
 class WMSLayerPage extends StatelessWidget {
@@ -15,22 +15,25 @@ class WMSLayerPage extends StatelessWidget {
     return Scaffold(
       body: FlutterMap(
         options: MapOptions(
-          center: LatLng(39,32.83),
-          zoom: 1,
+          initialCenter: LatLng(39.93094480417436, 32.8305895893693),
+          initialZoom: 13,
 
         ),
         children: [
           TileLayer(
-subdomains: ["a","b","c","d","e","f","g","h"],
+            subdomains: ["a","b","c","d","e","f","g","h"],
 
             wmsOptions: WMSTileLayerOptions(
-              baseUrl: 'http://192.168.56.1:8080/geoserver/tiger/wms?',
-              layers: ['tiger:tiger_roads'],
+              baseUrl: 'http://192.168.56.1:8080/geoserver/datar/wms?',
+              layers: ['datar:datar'],
               format: 'image/png',
               transparent: true,
+              crs: Epsg4326(),
+
 
 
             ),
+
             // Diğer tilelayer seçenekleri
           ),
 
@@ -39,5 +42,7 @@ subdomains: ["a","b","c","d","e","f","g","h"],
       ),
 
     );
+
   }
+
 }
