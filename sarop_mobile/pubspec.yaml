@@ -42,6 +42,7 @@ dependencies:
   latlong2: ^0.9.0
   url_launcher: ^6.2.6
   shared_preferences: ^2.0.15
+  webview_flutter: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -60,7 +61,8 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-
+    - assets/map.html
+    - assets/L.Geoserver.js
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

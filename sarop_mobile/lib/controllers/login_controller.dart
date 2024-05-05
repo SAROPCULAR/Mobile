@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-import '/screens/home.dart';
+import 'package:sarop_mobile/screens/jsmap/map.dart';
+
+import '../screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '/utils/api_endpoints.dart';
@@ -37,7 +39,7 @@ class LoginController extends GetxController {
 
           emailController.clear();
           passwordController.clear();
-          Get.off(WMSLayerPage());
+          Get.off(LocalHtmlFromAssets());
         } else {
           throw "Access token or refresh token is missing in the response";
         }

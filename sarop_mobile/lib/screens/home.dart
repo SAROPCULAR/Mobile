@@ -15,8 +15,8 @@ class WMSLayerPage extends StatelessWidget {
     return Scaffold(
       body: FlutterMap(
         options: MapOptions(
-          initialCenter: LatLng(39.93094480417436, 32.8305895893693),
-          initialZoom: 13,
+          initialCenter: LatLng(40.4375115,32.5624961),
+          initialZoom: 1,
 
         ),
         children: [
@@ -25,10 +25,10 @@ class WMSLayerPage extends StatelessWidget {
 
             wmsOptions: WMSTileLayerOptions(
               baseUrl: 'http://192.168.56.1:8080/geoserver/datar/wms?',
-              layers: ['datar:datar'],
-              format: 'image/png',
+              layers: ['datar:output'],
+              format: 'image/jpeg',
               transparent: true,
-              crs: Epsg4326(),
+
 
 
 
@@ -36,6 +36,8 @@ class WMSLayerPage extends StatelessWidget {
 
             // Diğer tilelayer seçenekleri
           ),
+
+
 
 
         ],

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Map</title>
+
+    <!-- Leaflet CSS -->
+    <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+<!--end::Theme mode setup on page load-->
+
+<div id="map" style="width: 100%; height: 600px"></div>
+
+<!-- leaflet js -->
+<script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""
+></script>
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+></script>
+
+<script>
+      var OSM = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          maxZoom: 19,
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }
+      );
+
+      var OSM_Topo = L.tileLayer.wms(
+        "http://ows.mundialis.de/services/service?",
+        {
+          layers: "TOPO-OSM-WMS",
+        }
+      );
+
+      var Esri_WorldImagery = L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        {
+          attribution:
+            "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
+        }
+      );
+
+      var ECW = L.tileLayer.wms("http://192.168.56.1:8080/geoserver/wms", {
+        layers: "datar:datar",
+        format: "image/jpeg",
+        transparent: true,
+        version: "1.1.0",
+        crs: L.CRS.EPSG4326,
+      });
+
+      var map = L.map("map", {
+        layers: [OSM, ECW],
+      }).setView([39.93094480417436, 32.8305895893693], 10);
+
+      var baseMaps = {
+        OpenStreetMap: OSM,
+        "OpenStreetMap Topo": OSM_Topo,
+        "ESRI  World Imnagery": Esri_WorldImagery,
+        ECW: ECW,
+      };
+      var overlayMaps = {};
+      L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+      // Control 2: This add a scale to the map
+      L.control.scale().addTo(map);
+
+      // Control 3: This add a Search bar
+      var searchControl = new L.esri.Controls.Geosearch().addTo(map);
+
+      var results = new L.LayerGroup().addTo(map);
+
+      searchControl.on("results", function (data) {
+        results.clearLayers();
+        for (var i = data.results.length - 1; i >= 0; i--) {
+          results.addLayer(L.marker(data.results[i].latlng));
+        }
+      });
+    </script>
+</body>
+</html>
