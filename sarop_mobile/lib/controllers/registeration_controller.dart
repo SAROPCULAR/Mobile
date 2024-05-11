@@ -40,7 +40,7 @@ class RegisterationController extends GetxController {
           nameController.clear();
           emailController.clear();
           passwordController.clear();
-          Get.off(WMSLayerPage());
+
         } else {
             throw "Access token or refresh token is missing in the response";
         }

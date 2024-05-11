@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:sarop_mobile/screens/jsmap/map.dart';
-
-import '../screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '/utils/api_endpoints.dart';
 import 'package:http/http.dart' as http;
+import 'package:sarop_mobile/screens/dropdownpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '/utils/api_endpoints.dart';
+import '../screens/home.dart';
 
 class LoginController extends GetxController {
   TextEditingController emailController = TextEditingController();
@@ -39,26 +39,35 @@ class LoginController extends GetxController {
 
           emailController.clear();
           passwordController.clear();
-          Get.off(LocalHtmlFromAssets());
+          Get.off(MyApp());
         } else {
           throw "Access token or refresh token is missing in the response";
         }
       } else {
         throw jsonDecode(response.body)["message"] ?? "Unknown Error Occurred";
       }
-    }
-
-    catch (error) {
+    } catch (error) {
       Get.back();
       showDialog(
-          context: Get.context!,
-          builder: (context) {
-            return SimpleDialog(
-              title: Text('Error'),
-              contentPadding: EdgeInsets.all(20),
-              children: [Text(error.toString())],
-            );
-          });
+        context: Get.context!,
+        builder: (context) {
+          return SimpleDialog(
+            title: Text('Error'),
+            contentPadding: EdgeInsets.all(20),
+            children: [Text(error.toString())],
+          );
+        },
+      );
     }
+  }
+
+  Future<String?> getAccessToken() async {
+    final SharedPreferences? prefs = await _prefs;
+    return prefs?.getString('access_token');
+  }
+
+  Future<String?> getRefreshToken() async {
+    final SharedPreferences? prefs = await _prefs;
+    return prefs?.getString('refresh_token');
   }
 }
