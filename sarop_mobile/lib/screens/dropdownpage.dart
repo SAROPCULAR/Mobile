@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'CHOOSE YOUR MAP',
+      title: 'Select Your Map',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -101,13 +101,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Choose Your Map'),
+        backgroundColor: Colors.indigo,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             DropdownButton<String>(
-              hint: Text('Select Workspace'),
+              hint: Text('Select Workspace', style: TextStyle(color: Colors.indigo)),
               value: selectedWorkspace,
               onChanged: (String? newValue) {
                 setState(() {
@@ -124,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             SizedBox(height: 20),
             DropdownButton<String>(
-              hint: Text('Select Map'),
+              hint: Text('Select Map', style: TextStyle(color: Colors.indigo)),
               value: selectedMap,
               onChanged: (String? newValue) {
                 setSelectedMap(newValue!);
@@ -139,7 +140,10 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: onSubmit,
-              child: Text('Submit'),
+              child: Text('Submit' ,style: TextStyle(color: Colors.white),),
+              style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.indigo,
+              ),
             ),
           ],
         ),
