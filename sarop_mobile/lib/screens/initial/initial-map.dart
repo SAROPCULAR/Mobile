@@ -24,8 +24,8 @@ class MapPage extends StatelessWidget {
       ),
       body: FlutterMap(
         options: MapOptions(
-          center: LatLng(51.509364, -0.128928),
-          zoom: 9.2,
+          initialCenter: LatLng(51.509364, -0.128928),
+          initialZoom: 9.2,
         ),
         children: [
           TileLayer(
@@ -43,10 +43,10 @@ class MapPage extends StatelessWidget {
         ],
       ),
       floatingActionButton: Container(
-        width: MediaQuery.of(context).size.width * 0.8, // Ekran genişliğinin %80'i kadar genişlik
-        margin: EdgeInsets.only(bottom: 50), // Alt kenardan 50 piksel yukarıda
+        width: MediaQuery.of(context).size.width * 0.8,
+        margin: EdgeInsets.only(bottom: 50),
         child: FloatingActionButton(
-          backgroundColor: Colors.indigo, // Arka plan rengi mavi olarak ayarlanıyor
+          backgroundColor: Colors.indigo,
           onPressed: () {
             Navigator.push(
               context,

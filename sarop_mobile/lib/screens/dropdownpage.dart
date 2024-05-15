@@ -33,6 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Map<String, dynamic>> maps = [];
   String? selectedMap;
   String? selectedMapDisplayUrl;
+  String? selectedMapDisplayID;
 
   @override
   void initState() {
@@ -83,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       selectedMap = mapName;
       selectedMapDisplayUrl = selected['displayUrl'];
+      selectedMapDisplayID = selected['id'];
     });
   }
 
@@ -91,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => WMSLayerPage(selectedMapDisplayUrl!)),
+        MaterialPageRoute(builder: (context) => WMSLayerPage(selectedMapDisplayUrl!,selectedMapDisplayID!)),
       );
     }
   }
