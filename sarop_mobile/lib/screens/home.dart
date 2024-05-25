@@ -73,65 +73,37 @@ class _WMSLayerPageState extends State<WMSLayerPage> {
     },);
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      final mockdata = data[0];
-      final notes = mockdata['user']['notes'];
+      setState(() {
+        markers.clear();
+        for (var item in data) {
+          final comment = item['comment'];
+          final x = item['coordinate']['x'];
+          final y = item['coordinate']['y'];
 
-      List<Marker> tempMarkers = [];
-
-      for (var note in notes) {
-        if (note is Map<String, dynamic>) {
-          String comment = note['comment'];
-          double x = note['coordinate']['x'];
-          double y = note['coordinate']['y'];
-
-          tempMarkers.add(
+          markers.add(
             Marker(
-              width: 10.0,
-              height: 10.0,
+              width: 120.0,
+              height: 120.0,
               point: LatLng(y, x),
 
-                child: Text(comment),
-
-            ),
-          );
-
-          // Map içindeki notes'u da işlemek için:
-          if (note.containsKey('map') && note['map'].containsKey('notes')) {
-            var mapNotes = note['map']['notes'];
-            for (var mapNote in mapNotes) {
-              if (mapNote is Map<String, dynamic>) {
-                String mapComment = mapNote['comment'];
-                double mapX = mapNote['coordinate']['x'];
-                double mapY = mapNote['coordinate']['y'];
-
-                tempMarkers.add(
-                  Marker(
-                    width: 400.0,
-                    height: 400.0,
-
-                    point: LatLng(mapY, mapX),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.comment,),
-                        SizedBox(width:20),
-                        Text(mapComment, style:TextStyle(color: Colors.indigo,fontWeight: FontWeight.bold) ,),
-                      ],
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.comment,
+                      color: Colors.red,
+                      size: 40,
                     ),
+                    Text(comment, style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
 
-                  ),
-                );
-              }
-            }
-          }
+          );
         }
-      }
-
-      setState(() {
-        markers = tempMarkers;
       });
     } else {
-      throw Exception('Failed to load data');
+      // Handle error
+      print("Failed to load notes");
     }
   }
   @override
@@ -176,6 +148,8 @@ class _WMSLayerPageState extends State<WMSLayerPage> {
                 'localhost',
                 '192.168.56.1',
               ),
+
+
 
               subdomains: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'],
             ),

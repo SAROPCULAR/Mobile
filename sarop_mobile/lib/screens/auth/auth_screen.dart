@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors
-
 import '/controllers/login_controller.dart';
 import '/controllers/registeration_controller.dart';
 import '/screens/auth/widgets/input_fields.dart';
