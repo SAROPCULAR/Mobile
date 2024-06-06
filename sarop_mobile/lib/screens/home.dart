@@ -18,7 +18,8 @@ class WMSLayerPage extends StatefulWidget {
 class _WMSLayerPageState extends State<WMSLayerPage> {
   bool _showOpenStreetMap = false;
   MapController _mapController = MapController();
-  List<List<Map<String, double>>> polygons = [];
+
+  List<List<LatLng>> polygons = [];
   List<Marker> markers = [];
 
   Future<void> _fetchCoordinates() async {
@@ -30,42 +31,23 @@ class _WMSLayerPageState extends State<WMSLayerPage> {
     if (response.statusCode == 200) {
 
       final List<dynamic> data = json.decode(response.body);
-
-      data.forEach((polygonData) {
-        List<Map<String, double>> coordinates = [];
-        if (polygonData is Map && polygonData.containsKey('coordinates')) {
-
-          polygonData['coordinates'].forEach((coord) {
-            if (coord is Map && coord.containsKey('x') && coord.containsKey('y')) {
-              coordinates.add({'x': coord['x'], 'y': coord['y']});
-            }
-          });
-          polygons.add(coordinates);
-        }
-
-        if (polygonData is Map && polygonData.containsKey('map') && polygonData['map'] is Map && polygonData['map'].containsKey('polygons')) {
-          polygonData['map']['polygons'].forEach((polygon) {
-            if (polygon is Map && polygon.containsKey('coordinates')) {
-
-              List<Map<String, double>> mapCoordinates = [];
-              polygon['coordinates'].forEach((coord) {
-                if (coord is Map && coord.containsKey('x') && coord.containsKey('y')) {
-                  mapCoordinates.add({'x': coord['x'], 'y': coord['y']});
-                }
-              });
-              polygons.add(mapCoordinates);
-            }
-          });
-        }
-      });
       setState(() {
-
+        polygons.clear();
+        for (var item in data) {
+          List<LatLng> polygonCoords = [];
+          for (var coord in item['coordinates']) {
+            polygonCoords.add(LatLng(coord['x'], coord['y']));
+          }
+          polygons.add(polygonCoords);
+        }
       });
     } else {
-
       print('HTTP Error: ${response.statusCode}');
     }
-  }  Future<void> _fetchNotest() async {
+  }
+
+
+    Future<void> _fetchNotest() async {
     final accessToken = await LoginController().getAccessToken();
     final response = await http.get(Uri.parse(ApiEndPoints.baseUrl+"note/"+widget.selectedMapDisplayID),   headers: {
       "Content-Type": "application/json",
@@ -77,8 +59,8 @@ class _WMSLayerPageState extends State<WMSLayerPage> {
         markers.clear();
         for (var item in data) {
           final comment = item['comment'];
-          final x = item['coordinate']['x'];
-          final y = item['coordinate']['y'];
+          final x = item['coordinate']['y'];
+          final y = item['coordinate']['x'];
 
           markers.add(
             Marker(
@@ -118,17 +100,23 @@ class _WMSLayerPageState extends State<WMSLayerPage> {
 
 
     polygons.forEach((polygonCoords) {
-      List<LatLng> points = [];
-      polygonCoords.forEach((coord) {
-        points.add(LatLng(coord['y']!, coord['x']!));
-      });
       polygonLayers.add(Polygon(
-        points: points,
+        points: polygonCoords,
         color: Colors.blue,
         isFilled: true,
       ));
     });
     return Scaffold(
+      appBar: AppBar(
+        title: Text('WMS Layer', style: TextStyle(color: Colors.white),),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Colors.indigo,
+      ),
       body: FlutterMap(
         mapController: _mapController,
         options: const MapOptions(

@@ -104,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text('Choose Your Map'),
         backgroundColor: Colors.indigo,
+
       ),
       body: Center(
         child: Column(
